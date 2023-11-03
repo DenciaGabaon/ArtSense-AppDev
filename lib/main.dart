@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'HomePage.dart';
+import 'NavigationBar.dart';
 import 'Camera.dart';
 
 void main() {
@@ -20,8 +20,8 @@ class ArtSense extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Montserrat'),
       routes: {
-        '/second': (context) => HomePage(),
-        '/third': (context) => Camera()
+        '/second': (context) => MyHomePage(),
+        '/third': (context) => Camera(),
         // Define a named route for SecondScreen
       },
       home: const MyWelcomePage(),
@@ -72,6 +72,7 @@ class _MyWelcomePageState extends State<MyWelcomePage> {
                         color: Color.fromRGBO(0, 0, 0, 1),
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.w700,
+                        fontStyle: FontStyle.normal
                       ),
                       children: <TextSpan>[
                         TextSpan(
@@ -105,12 +106,14 @@ class _MyWelcomePageState extends State<MyWelcomePage> {
                     color: Color.fromRGBO(0, 0, 0, 1),
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.normal
+
                   ),
                 ),
               ),
               SizedBox(
                 width: 135,
-                height: 46,
+                height: 50,
 
                 child: ElevatedButton(
                   onPressed: () {
@@ -118,11 +121,14 @@ class _MyWelcomePageState extends State<MyWelcomePage> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromRGBO(167, 160, 108, 1),
-                    textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   child: const Text('Get Started',
                       style: TextStyle(
                         color: Color.fromRGBO(0, 0, 0, 1),
+                          fontSize: 14,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.w700,
+                          fontStyle: FontStyle.normal
                       )),
                 ),
               ),

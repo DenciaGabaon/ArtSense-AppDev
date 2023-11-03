@@ -65,6 +65,14 @@ flutter:
     - assets/Welcome1.png
     - assets/icon _photo camera_.png
     - assets/icon _gallery add_.png
+    - assets/emoji _artist palette_.png
+    - assets/icon _home_.png
+    - assets/home_outline.png
+    - assets/settings.png
+    - assets/palette_filled.png
+    - assets/abstract.png
+
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -91,10 +99,14 @@ flutter:
       fonts:
         - asset: fonts/Montserrat-ExtraBold.ttf
           weight: 800
-        - asset: fonts/Montserrat-Medium.ttf
+        - asset: fonts/Montserrat-Regular.ttf
           weight: 700
-        - asset: fonts/Montserrat-Black.ttf
+        - asset: fonts/Montserrat-SemiBold.ttf
           weight: 600
+    - family: Lato
+      fonts:
+        - asset: fonts/Lato-Bold.ttf
+          weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
