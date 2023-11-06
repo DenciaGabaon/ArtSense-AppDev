@@ -1,81 +1,179 @@
+/*ERROR - idk why tflite package is not working
+   tasks:
+   -Gallery & Camera permission
+   - Camera & gallery crop
+   - import model
+   - prediction out page design
+   - paintings history, help
+   Gallery & camera access - Done
+*/
+
+//import 'package:flutter/cupertino.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:tflite_flutter/tflite_flutter.dart'
 
+class DisplayPrediction extends StatefulWidget {
+  final XFile importedmage;
 
-class Camera extends StatelessWidget {
-  Camera({Key? key});
+  DisplayPrediction({Key? key, required this.importedmage}) : super(key: key);
+
+  @override
+  _DisplayPredictionState createState() => _DisplayPredictionState();
+}
+
+class _DisplayPredictionState extends State<DisplayPrediction> {
+  @override
+  void initState()
+  {
+    super.initState();
+    loadModel();
+  }
+  Future loadModel()
+  async {
+    Tflite.close();
+    String res;
+    res=(await Tflite.loadModel(model: "assets/initial_model_42.tflite",labels: "assets/labels.txt"))!;
+    print("Models loading status: $res");
+  }
+
+  Future imageClassification(File image)
+  async {
+    final List? recognitions = await Tflite.runModelOnImage(
+      path: image.path,
+      numResults: 6,
+      threshold: 0.05,
+      imageMean: 127.5,
+      imageStd: 127.5,
+    );
+    setState(() {
+      _results=recognitions!;
+      _image=image;
+      imageSelect=true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromRGBO(245, 245, 219, 1),
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              Text(
-                'ArtSense',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 30,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              Text(
-                'Choose an option how\n do you want to identify\n your painting?',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(16), // Add padding around the container
-                color: Colors.yellow, // Set the background color of the container
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    ElevatedButton(
-                      onPressed: () {
-                        // Add your button 1 click logic here
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromRGBO(167, 160, 108, 1),
-                        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0), // Make the button round
-                        ),
-                      ),
-                      child: Text('Camera',
-                        style: TextStyle(
-                          color: Color.fromRGBO(0, 0, 0, 1),
-                        ),),
-
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Add your button 2 click logic here
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromRGBO(167, 160, 108, 1),
-                        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0), // Make the button round
-                        ),
-                      ),
-                      child: Text('Gallery',
-                        style: TextStyle(
-                          color: Color.fromRGBO(0, 0, 0, 1),
-                        ),),
-                    ),
-                  ],
-                ),
-              )
-
-            ],
+    return WillPopScope(
+      onWillPop: () async {
+        return true; // if true, return to homepage
+      },
+      child: Scaffold(
+        appBar: AppBar(title: Text('ArtSense')),
+        body: SafeArea(
+          child: Container(
+            padding: EdgeInsets.all(16),
+            child: Image.file(File(widget.importedmage.path)),
           ),
         ),
       ),
     );
   }
 }
+
+
+
+/*class TfliteModel extends StatefulWidget {
+  const TfliteModel({Key? key}) : super(key: key);
+
+  @override
+  _TfliteModelState createState() => _TfliteModelState();
+}
+
+class _TfliteModelState extends State<TfliteModel> {
+
+  late File _image;
+ // late List _results
+  bool imageSelect=false;
+  @override
+  void initState()
+  {
+    super.initState();
+    loadModel();
+  }
+  Future loadModel()
+  async {
+    //Tflite.close();
+    String res;
+   // res=(await Tflite.loadModel(model: "assets/model.tflite",labels: "assets/labels.txt"))!;
+    print("Models loading status: $res");
+  }
+
+  Future imageClassification(File image)
+  async {
+  //  final List? recognitions = await Tflite.runModelOnImage(
+      path: image.path,
+      numResults: 6,
+      threshold: 0.05,
+      imageMean: 127.5,
+      imageStd: 127.5,
+    );
+    setState(() {
+    //  _results=recognitions!;
+      _image=image;
+      imageSelect=true;
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Image Classification"),
+      ),
+      body: ListView(
+        children: [
+          (imageSelect)?Container(
+            margin: const EdgeInsets.all(10),
+            child: Image.file(_image),
+          ):Container(
+            margin: const EdgeInsets.all(10),
+            child: const Opacity(
+              opacity: 0.8,
+              child: Center(
+                child: Text("No image selected"),
+              ),
+            ),
+          ),
+          SingleChildScrollView(
+            child: Column(
+              children: (imageSelect)?_results.map((result) {
+                return Card(
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: Text(
+                      "${result['label']} - ${result['confidence'].toStringAsFixed(2)}",
+                      style: const TextStyle(color: Colors.red,
+                          fontSize: 20),
+                    ),
+                  ),
+                );
+              }).toList():[],
+
+            ),
+          )
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: pickImage,
+        tooltip: "Pick Image",
+        child: const Icon(Icons.image),
+      ),
+    );
+  }
+  Future pickImage()
+  async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? pickedFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+    );
+    File image=File(pickedFile!.path);
+    imageClassification(image);
+  }
+
+
+
+
+}*/

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'NavigationBar.dart';
-import 'Camera.dart';
+
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -20,8 +20,8 @@ class ArtSense extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Montserrat'),
       routes: {
-        '/second': (context) => MyHomePage(),
-        '/third': (context) => Camera(),
+        '/second': (context) => MyNavigation(),
+       // '/third': (context) => Camera(),
         // Define a named route for SecondScreen
       },
       home: const MyWelcomePage(),
@@ -36,6 +36,8 @@ class MyWelcomePage extends StatefulWidget {
   @override
   State<MyWelcomePage> createState() => _MyWelcomePageState();
 }
+
+
 
 class _MyWelcomePageState extends State<MyWelcomePage> {
 

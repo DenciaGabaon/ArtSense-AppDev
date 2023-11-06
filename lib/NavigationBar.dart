@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'Paintings.dart';
 
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class MyNavigation extends StatefulWidget {
+  const MyNavigation({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _HomePageState();
+  State<MyNavigation> createState() => NavigationBar();
 }
 
-class _HomePageState extends State<MyHomePage>{
+class NavigationBar extends State<MyNavigation>{
    int Myindex = 0;
    List<Widget> widgetList = const [
-     Home(),
+     MyHomePage(),
      Genre(),
      Center(child: Text('staph', style: TextStyle(fontSize: 30),),)
    ];
@@ -28,12 +28,12 @@ class _HomePageState extends State<MyHomePage>{
            type: BottomNavigationBarType.fixed,
            items: [
               BottomNavigationBarItem(
-                 icon:  Image.asset('assets/home_outline.png',),
-                 activeIcon: Image.asset('assets/icon _home_.png',),
+                 icon:  Icon(Icons.home_outlined),//Image.asset('assets/home_outline.png',),
+                 activeIcon: Icon(Icons.home_filled), //Image.asset('assets/icon _home_.png',),
                  label: 'Home'),
               BottomNavigationBarItem(
-                 icon: Image.asset('assets/emoji _artist palette_.png', ),
-                 activeIcon: Image.asset('assets/palette_filled.png',),
+                 icon: Icon(Icons.palette_outlined),//Image.asset('assets/emoji _artist palette_.png', ),
+                 activeIcon: Icon(Icons.palette),//Image.asset('assets/palette_filled.png',),
                  label: 'Paintings'),
               BottomNavigationBarItem(
                  icon:  Icon(Icons.help_outline, ),
@@ -48,7 +48,7 @@ class _HomePageState extends State<MyHomePage>{
         },
          selectedItemColor: Colors.black,
          unselectedItemColor: Colors.black,
-         iconSize: 50,
+         iconSize: 45,
          selectedLabelStyle: TextStyle(
            fontSize: 16, // Set the font size for the selected label
            fontFamily: 'Montserrat', // Set your desired font family for the selected label

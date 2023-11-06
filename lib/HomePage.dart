@@ -1,7 +1,55 @@
-import 'package:flutter/material.dart';
+//ERROR SDK IS BELOW 26 - 04/11
 
-class Home extends StatelessWidget {
-  const Home({Key? key});
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+//import 'package:tflite_flutter/tflite_flutter.dart'
+import 'dart:io';
+
+import 'Camera.dart';
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  State<MyHomePage> createState() => Home();
+}
+
+class Home extends State<MyHomePage>{
+
+ /* File ? selectedImage; //storage for the selected image
+
+  late File _image;
+  late List _results;
+  bool imageSelect=false;
+  @override
+  void initState()
+  {
+    super.initState();
+    loadModel();
+  }
+  Future loadModel()
+  async {
+    Tflite.close();
+    String res;
+    res=(await Tflite.loadModel(model: "assets/model.tflite",labels: "assets/labels.txt"))!;
+    print("Models loading status: $res");
+  }
+
+  Future imageClassification(File image)
+  async {
+    final List? recognitions = await Tflite.runModelOnImage(
+      path: image.path,
+      numResults: 6,
+      threshold: 0.05,
+      imageMean: 127.5,
+      imageStd: 127.5,
+    );
+    setState(() {
+      _results=recognitions!;
+      _image=image;
+      imageSelect=true;
+    });
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +85,7 @@ class Home extends StatelessWidget {
 
                   ElevatedButton.icon(
                     onPressed: () {
-                      // Add your button 1 click logic here
+                       _openCamera(context);
                     },
                     label: Text('Camera', style: TextStyle(
                       color: Color.fromRGBO(0, 0, 0, 1),
@@ -49,7 +97,6 @@ class Home extends StatelessWidget {
                       'assets/icon _photo camera_.png',
                       height: 34,
                       width: 34,
-                      // Set the size of the icon
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromRGBO(167, 160, 108, 1),
@@ -63,7 +110,7 @@ class Home extends StatelessWidget {
                   const SizedBox(height: 30),
                   ElevatedButton.icon(
                     onPressed: () {
-                      // Add your button 1 click logic here
+                      _Gallery(context);
                     },
                     label: Text('Gallery', style: TextStyle(
                       color: Color.fromRGBO(0, 0, 0, 1),
@@ -92,6 +139,40 @@ class Home extends StatelessWidget {
       ),
     );
   }
+
+  void _openCamera(BuildContext context) async {
+    final XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+    );
+
+    if (pickedFile == null) return;
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => DisplayPrediction(image: pickedFile)));
+  }
+
+  void _Gallery(BuildContext context) async {
+    final XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedFile == null) return;
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => DisplayPrediction(image: pickedFile)));
+  }
+
+
+ /* Future _Gallery() async {
+    final returnedImage = await ImagePicker().pickImage(
+        source: ImageSource.gallery);
+    setState(() {
+      selectedImage = File(returnedImage!.path);
+    });
+    Future _Camera() async {
+      final returnedImage = await ImagePicker().pickImage(
+          source: ImageSource.camera);
+      setState(() {
+        selectedImage = File(returnedImage!.path);
+      });
+    }
+  }*/
 }
-
-

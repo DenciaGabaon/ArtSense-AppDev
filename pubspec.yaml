@@ -36,6 +36,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_native_splash: ^2.3.5
+  image_picker: ^0.8.1
+  tflite_flutter: ^0.10.1
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +73,8 @@ flutter:
     - assets/settings.png
     - assets/palette_filled.png
     - assets/abstract.png
+    - assets/initial_model_42.tflite
+    - assets/labels.txt
 
 
   # The following line ensures that the Material Icons font is
