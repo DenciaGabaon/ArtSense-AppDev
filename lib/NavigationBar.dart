@@ -48,7 +48,7 @@ class NavigationBar extends State<MyNavigation>{
         },
          selectedItemColor: Colors.black,
          unselectedItemColor: Colors.black,
-         iconSize: 45,
+         iconSize: 40,
          selectedLabelStyle: TextStyle(
            fontSize: 16, // Set the font size for the selected label
            fontFamily: 'Montserrat', // Set your desired font family for the selected label

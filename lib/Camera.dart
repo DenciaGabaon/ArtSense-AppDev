@@ -1,7 +1,7 @@
 /*ERROR - idk why tflite package is not working
    tasks:
-   -Gallery & Camera permission
-   - Camera & gallery crop
+   -Gallery & Camera permission - Done
+   - Camera & gallery crop - Done
    - import model
    - prediction out page design
    - paintings history, help
@@ -12,30 +12,35 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:tflite_flutter/tflite_flutter.dart'
+import 'package:tflite/tflite.dart';
 
 class DisplayPrediction extends StatefulWidget {
-  final XFile importedmage;
+   File importedimage;
 
-  DisplayPrediction({Key? key, required this.importedmage}) : super(key: key);
+  DisplayPrediction({Key? key, required this.importedimage}) : super(key: key);
 
   @override
   _DisplayPredictionState createState() => _DisplayPredictionState();
 }
 
 class _DisplayPredictionState extends State<DisplayPrediction> {
+  late File _image;
+  late List _results;
+  bool imageSelect=false;
+
   @override
   void initState()
   {
     super.initState();
     loadModel();
   }
+
   Future loadModel()
   async {
     Tflite.close();
     String res;
-    res=(await Tflite.loadModel(model: "assets/initial_model_42.tflite",labels: "assets/labels.txt"))!;
+    res=(await Tflite.loadModel(model: "assets/initial_model_42.tflite",
+        labels: "assets/labels.txt"))!;
     print("Models loading status: $res");
   }
 
@@ -50,30 +55,62 @@ class _DisplayPredictionState extends State<DisplayPrediction> {
     );
     setState(() {
       _results=recognitions!;
-      _image=image;
+      _image = image;
       imageSelect=true;
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return true; // if true, return to homepage
-      },
-      child: Scaffold(
-        appBar: AppBar(title: Text('ArtSense')),
-        body: SafeArea(
-          child: Container(
-            padding: EdgeInsets.all(16),
-            child: Image.file(File(widget.importedmage.path)),
+@override
+Widget build(BuildContext context) {
+    imageClassification(File(widget.importedimage.path));
+  return WillPopScope(
+    onWillPop: () async {
+      return true; // if true, return to homepage
+    },
+    child: Scaffold(
+      appBar: AppBar(title: Text('ArtSense')),
+      body: ListView(
+        children: [
+          (imageSelect)
+              ? Container(
+            margin: const EdgeInsets.all(10),
+            child: Image.file(_image),
+          )
+              : Container(
+            margin: const EdgeInsets.all(10),
+                 child: const Opacity(
+                     opacity: 0.8,
+                   child: Center(
+                      child: Text("No image selected"),
+              ),
+            ),
           ),
-        ),
+          SingleChildScrollView(
+            child: Column(
+              children: (imageSelect)
+                  ? _results.map((result) {
+                return Card(
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: Text(
+                      "${result['label']} - ${result['confidence'].toStringAsFixed(2)}",
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList()
+                  : [],
+            ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+ }
 }
-
 
 
 /*class TfliteModel extends StatefulWidget {

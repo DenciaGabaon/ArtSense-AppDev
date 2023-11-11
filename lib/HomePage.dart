@@ -1,9 +1,13 @@
-//ERROR SDK IS BELOW 26 - 04/11
+//ERROR SDK IS BELOW 26 - 04/11 - solved
+
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 //import 'package:tflite_flutter/tflite_flutter.dart'
-import 'dart:io';
+
 
 import 'Camera.dart';
 
@@ -85,7 +89,18 @@ class Home extends State<MyHomePage>{
 
                   ElevatedButton.icon(
                     onPressed: () {
-                       _openCamera(context);
+                      _Camera();
+
+                      /*async {
+                      Map<Permission, PermissionStatus> statuses = await [
+                      Permission.storage, Permission.camera,
+                      ].request();
+                      if(statuses[Permission.storage]!.isGranted && statuses[Permission.camera]!.isGranted){
+                        _Camera();
+                      } else {
+                      print('no permission provided');
+                      }*/
+
                     },
                     label: Text('Camera', style: TextStyle(
                       color: Color.fromRGBO(0, 0, 0, 1),
@@ -110,7 +125,9 @@ class Home extends State<MyHomePage>{
                   const SizedBox(height: 30),
                   ElevatedButton.icon(
                     onPressed: () {
-                      _Gallery(context);
+                      _Gallery();
+
+                      //_Gallery(context);
                     },
                     label: Text('Gallery', style: TextStyle(
                       color: Color.fromRGBO(0, 0, 0, 1),
@@ -140,6 +157,75 @@ class Home extends State<MyHomePage>{
     );
   }
 
+  final picker = ImagePicker();
+
+  _Gallery() async {
+    await  picker.pickImage(
+        source: ImageSource.gallery, imageQuality: 50,
+        maxHeight: 500,maxWidth: 500
+    ).then((value){
+      if(value != null){
+        _cropImage(File(value.path));
+      }
+    });
+  }
+
+  _Camera() async {
+    await picker.pickImage(
+        source: ImageSource.camera, imageQuality: 50,
+        maxHeight: 500,maxWidth: 500
+    ).then((value){
+      if(value != null){
+        _cropImage(File(value.path));
+      }
+    });
+  }
+
+  _cropImage(File imgFile) async {
+    final croppedFile = await ImageCropper().cropImage(
+        sourcePath: imgFile.path,
+        aspectRatioPresets: Platform.isAndroid
+            ? [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ] : [
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio5x3,
+          CropAspectRatioPreset.ratio5x4,
+          CropAspectRatioPreset.ratio7x5,
+          CropAspectRatioPreset.ratio16x9
+        ],
+        uiSettings: [AndroidUiSettings(
+            toolbarTitle: "Image Cropper",
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+          IOSUiSettings(
+            title: "Image Cropper",
+          )
+        ]);
+    if (croppedFile != null) {
+
+      imageCache.clear();
+      setState(() {
+        var imageFile = File(croppedFile.path);
+
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => DisplayPrediction(importedimage: imageFile, )));
+      });
+      // reload();
+    }
+  }
+
+
+/*
   void _openCamera(BuildContext context) async {
     final XFile? pickedFile = await ImagePicker().pickImage(
       source: ImageSource.camera,
@@ -147,7 +233,7 @@ class Home extends State<MyHomePage>{
 
     if (pickedFile == null) return;
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => DisplayPrediction(image: pickedFile)));
+        .push(MaterialPageRoute(builder: (_) => DisplayPrediction(importedimage: pickedFile, )));
   }
 
   void _Gallery(BuildContext context) async {
@@ -157,11 +243,11 @@ class Home extends State<MyHomePage>{
 
     if (pickedFile == null) return;
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => DisplayPrediction(image: pickedFile)));
+        .push(MaterialPageRoute(builder: (_) => DisplayPrediction(importedimage: pickedFile,)));
   }
 
 
- /* Future _Gallery() async {
+  Future _Gallery() async {
     final returnedImage = await ImagePicker().pickImage(
         source: ImageSource.gallery);
     setState(() {
