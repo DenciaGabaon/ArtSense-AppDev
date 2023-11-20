@@ -56,7 +56,7 @@ class _MyWelcomePageState extends State<MyWelcomePage> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(245, 245, 219, 1),
+      backgroundColor: Colors.white, //const Color.fromRGBO(245, 245, 219, 1),
       body: SafeArea( // SafeArea yung visible part ng screen.
         child: Container(
           padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
@@ -96,7 +96,6 @@ class _MyWelcomePageState extends State<MyWelcomePage> {
                 width: size.width,
                 margin: const EdgeInsets.only(top: 25, bottom: 25),
                 child: Image.asset('assets/Welcome1.png', height: 433, width: 304),
-
               ),
               const Align(
                 alignment: Alignment.center,
@@ -122,11 +121,11 @@ class _MyWelcomePageState extends State<MyWelcomePage> {
                     Navigator.pushNamed(context, '/second'); // Navigate to the SecondScreen
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromRGBO(167, 160, 108, 1),
+                    backgroundColor: const Color.fromRGBO(66, 103, 178, 1),
                   ),
                   child: const Text('Get Started',
                       style: TextStyle(
-                        color: Color.fromRGBO(0, 0, 0, 1),
+                        color: Colors.white,//Color.fromRGBO(0, 0, 0, 1),
                           fontSize: 14,
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w700,

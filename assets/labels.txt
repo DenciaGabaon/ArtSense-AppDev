@@ -1,9 +1,9 @@
-Abstract
-Baroque
-Expressionism
-Impressionism
-Neoclassicism
-Pop Art
-Realism
-Renaissance
-Surrealism
+0 Abstract
+1 Baroque
+2 Expressionism
+3 Impressionism
+4 Neoclassicism
+5 Pop Art
+6 Realism
+7 Renaissance
+8 Surrealism

@@ -1,11 +1,13 @@
 //ERROR SDK IS BELOW 26 - 04/11 - solved
+//TO DO maintain navigation bar while routing to another page of home page
+//another route for page 1 og home page for displaying painting sample pictures.
 
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
+//import 'package:permission_handler/permission_handler.dart';
 //import 'package:tflite_flutter/tflite_flutter.dart'
 
 
@@ -58,7 +60,7 @@ class Home extends State<MyHomePage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(245, 245, 219, 1),
+      backgroundColor: Colors.white,//Color.fromRGBO(245, 245, 219, 1),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
@@ -103,7 +105,7 @@ class Home extends State<MyHomePage>{
 
                     },
                     label: Text('Camera', style: TextStyle(
-                      color: Color.fromRGBO(0, 0, 0, 1),
+                      color: Colors.white,//Color.fromRGBO(0, 0, 0, 1),
                       fontFamily: 'Montserrat',
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
@@ -114,7 +116,7 @@ class Home extends State<MyHomePage>{
                       width: 34,
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromRGBO(167, 160, 108, 1),
+                      backgroundColor: Color.fromRGBO(66, 103, 178, 1),//const Color.fromRGBO(167, 160, 108, 1),
                       minimumSize: Size(170, 55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
@@ -130,7 +132,7 @@ class Home extends State<MyHomePage>{
                       //_Gallery(context);
                     },
                     label: Text('Gallery', style: TextStyle(
-                      color: Color.fromRGBO(0, 0, 0, 1),
+                      color: Colors.white,//Color.fromRGBO(0, 0, 0, 1),
                       fontFamily: 'Montserrat',
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
@@ -141,7 +143,7 @@ class Home extends State<MyHomePage>{
                       width: 34, // Set the size of the icon
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromRGBO(167, 160, 108, 1),
+                      backgroundColor: Color.fromRGBO(66, 103, 178, 1), //const Color.fromRGBO(167, 160, 108, 1),
                       minimumSize: Size(170, 55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
@@ -202,13 +204,13 @@ class Home extends State<MyHomePage>{
           CropAspectRatioPreset.ratio16x9
         ],
         uiSettings: [AndroidUiSettings(
-            toolbarTitle: "Image Cropper",
-            toolbarColor: Colors.deepOrange,
+            toolbarTitle: "Spot The Painting",
+            toolbarColor:  Color.fromRGBO(66, 103, 178, 1),
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
           IOSUiSettings(
-            title: "Image Cropper",
+            title: "Spot The Painting",
           )
         ]);
     if (croppedFile != null) {

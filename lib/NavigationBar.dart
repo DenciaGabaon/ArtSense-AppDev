@@ -1,7 +1,7 @@
+import 'package:artsense/Camera.dart';
 import 'package:artsense/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'Paintings.dart';
-
 
 class MyNavigation extends StatefulWidget {
   const MyNavigation({Key? key}) : super(key: key);
@@ -20,10 +20,10 @@ class NavigationBar extends State<MyNavigation>{
    @override
   Widget build(BuildContext context){
      return Scaffold(
-       backgroundColor: Color.fromRGBO(245, 245, 219, 1),
+       //backgroundColor: Colors.white,//Color.fromRGBO(245, 245, 219, 1),
        body: widgetList[Myindex],
        bottomNavigationBar :  BottomNavigationBar(
-           backgroundColor: Color.fromRGBO(245, 245, 219, 1),
+           backgroundColor: Colors.white,
            currentIndex: Myindex,
            type: BottomNavigationBarType.fixed,
            items: [
@@ -46,8 +46,8 @@ class NavigationBar extends State<MyNavigation>{
             }
           );
         },
-         selectedItemColor: Colors.black,
-         unselectedItemColor: Colors.black,
+         selectedItemColor: Color.fromRGBO(66, 103, 178, 1),
+         unselectedItemColor: Color.fromRGBO(66, 103, 178, 1),
          iconSize: 35,
          selectedLabelStyle: TextStyle(
            fontSize: 16, // Set the font size for the selected label
