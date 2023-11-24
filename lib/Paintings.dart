@@ -7,12 +7,16 @@ class Genre extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> paintings = [Abstract(), Baroque(), Expressionism(),
-    Impressionism(), Neoclassicism(), Popart(), Realism(), Rennaissance(),
+    Impressionism(), Realism(), Rennaissance(),
     Surrealism()];
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: TikTokStyleFullPageScroller(
+        body: Scrollbar(
+          controller: ScrollController(),
+          thumbVisibility: true,
+          thickness: 10,
+          child: TikTokStyleFullPageScroller(
           contentSize: paintings.length,
           swipeVelocityThreshold: 2000,
           animationDuration: const Duration(milliseconds: 300),
@@ -22,6 +26,8 @@ class Genre extends StatelessWidget {
             );
           },
         ),
+
+        )
       ),
     );
   }
@@ -33,7 +39,7 @@ class Genre extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 55),
-            Text(
+            const Text(
               'Paintings',
               style: TextStyle(
                 fontFamily: 'Montserrat',
@@ -42,7 +48,7 @@ class Genre extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15),
-            Text(
+            const Text(
               'List of the paintings\n the app can identify.',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -65,12 +71,13 @@ class Genre extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            Container(
-              width: 304,
-              height: 433,
-              margin: const EdgeInsets.only(bottom: 15),
-              child: Image.asset('assets/abstract.png'),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child:
+              Image.asset('assets/abstract.png', width: 304,
+                height: 433,),
             ),
+            const SizedBox(height: 15),
             const SizedBox(
               width: 304,
               height: 80,
@@ -111,13 +118,13 @@ class Genre extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            Container(
-             width: 304,
-              height: 433,
-              margin: const EdgeInsets.only(bottom: 15),
-              child: Image.asset('assets/baroque.jpg',
-                fit: BoxFit.fitHeight,),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child:
+              Image.asset('assets/baroque.jpg', width: 304,
+                fit: BoxFit.fitHeight, height: 433,),
             ),
+            const SizedBox(height: 15),
             const SizedBox(
               width: 304,
               height: 130,
@@ -158,13 +165,13 @@ class Genre extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            Container(
-              width: 304,
-              height: 433,
-              margin: const EdgeInsets.only(bottom: 15),
-              child: Image.asset('assets/expressionism.jpg'
-                , fit: BoxFit.fitHeight),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child:
+              Image.asset('assets/expressionism.jpg', width: 304,
+                fit: BoxFit.fitHeight, height: 433,),
             ),
+            const SizedBox(height: 15),
             const SizedBox(
               width: 304,
               height: 145,
@@ -205,12 +212,13 @@ class Genre extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            Container(
-              width: 304,
-              height: 433,
-              margin: const EdgeInsets.only(bottom: 15),
-              child: Image.asset('assets/impressionism.jpeg' , fit: BoxFit.fitHeight),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child:
+              Image.asset('assets/impressionism.jpeg', width: 304,
+                fit: BoxFit.fill, height: 433,),
             ),
+            const SizedBox(height: 15),
             const SizedBox(
               width: 304,
               height: 80,
@@ -231,97 +239,6 @@ class Genre extends StatelessWidget {
     );
   }
 
-  Widget Neoclassicism() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
-      child: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 100),
-            const SizedBox(
-              width: 304,
-              child: Text(
-                'Neoclassicism (20th Century)',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Container(
-              width: 304,
-              height: 433,
-              margin: const EdgeInsets.only(bottom: 15),
-              child: Image.asset('assets/neoclassicism.jpg' , fit: BoxFit.fitHeight),
-            ),
-            const SizedBox(
-              width: 304,
-              height: 140,
-              child: Text(
-                'Neoclassicism is a style of painting that emphasizes rational order, clarity, and balance. Neoclassical painters often used idealized forms and classical references to create a sense of harmony and beauty. They were interested in reviving the ideals of classical art and often depicted subjects such as historical events, mythology, and allegorical figures.',
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  fontStyle: FontStyle.normal,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget Popart() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
-      child: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 120),
-            const SizedBox(
-              width: 304,
-              child: Text(
-                'Popart (20th Century)',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Container(
-              width: 304,
-              height: 433,
-              margin: const EdgeInsets.only(bottom: 15),
-              child: Image.asset('assets/popart.jpg' , fit: BoxFit.fitHeight),
-            ),
-            const SizedBox(
-              width: 304,
-              height: 80,
-              child: Text(
-                'Pop Art is a style of painting that celebrates pop culture, commercialism, and consumerism. Pop artists often use bold colors, simplified forms, and mass-produced images to create a sense of irony and humor. They are interested in exploring the impact of popular culture on our lives and often depict subjects such as celebrities, advertising, and everyday objects.',
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  fontStyle: FontStyle.normal,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget Realism() {
     return Padding(
@@ -343,12 +260,13 @@ class Genre extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            Container(
-              width: 304,
-              height: 433,
-              margin: const EdgeInsets.only(bottom: 15),
-              child: Image.asset('assets/realism.jpg' , fit: BoxFit.fitHeight),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child:
+              Image.asset('assets/realism.jpg', width: 304,
+                fit: BoxFit.fitHeight, height: 433,),
             ),
+            const SizedBox(height: 15),
             const SizedBox(
               width: 304,
               height: 140,
@@ -389,12 +307,13 @@ class Genre extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            Container(
-              width: 304,
-              height: 433,
-              margin: const EdgeInsets.only(bottom: 15),
-              child: Image.asset('assets/renaissance.jpeg' , fit: BoxFit.fitHeight),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child:
+              Image.asset('assets/renaissance.jpeg', width: 304,
+                fit: BoxFit.fill, height: 433,),
             ),
+            const SizedBox(height: 15),
             const SizedBox(
               width: 304,
               height: 140,
@@ -435,12 +354,13 @@ class Genre extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            Container(
-              width: 304,
-              height: 433,
-              margin: const EdgeInsets.only(bottom: 15),
-              child: Image.asset('assets/surrealism.jpg' , fit: BoxFit.fitHeight),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child:
+              Image.asset('assets/surrealism.jpg', width: 304,
+                fit: BoxFit.fitHeight, height: 433,),
             ),
+            const SizedBox(height: 15),
             const SizedBox(
               width: 304,
               height: 130,

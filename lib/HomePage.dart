@@ -21,42 +21,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class Home extends State<MyHomePage>{
-
- /* File ? selectedImage; //storage for the selected image
-
-  late File _image;
-  late List _results;
-  bool imageSelect=false;
-  @override
-  void initState()
-  {
-    super.initState();
-    loadModel();
-  }
-  Future loadModel()
-  async {
-    Tflite.close();
-    String res;
-    res=(await Tflite.loadModel(model: "assets/model.tflite",labels: "assets/labels.txt"))!;
-    print("Models loading status: $res");
-  }
-
-  Future imageClassification(File image)
-  async {
-    final List? recognitions = await Tflite.runModelOnImage(
-      path: image.path,
-      numResults: 6,
-      threshold: 0.05,
-      imageMean: 127.5,
-      imageStd: 127.5,
-    );
-    setState(() {
-      _results=recognitions!;
-      _image=image;
-      imageSelect=true;
-    });
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -220,7 +184,7 @@ class Home extends State<MyHomePage>{
         var imageFile = File(croppedFile.path);
 
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => DisplayPrediction(importedimage: imageFile, )));
+            .push(MaterialPageRoute(builder: (_) => DisplayPrediction(importedimage: imageFile)));
       });
       // reload();
     }

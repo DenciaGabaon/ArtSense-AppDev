@@ -2,8 +2,6 @@
 1 Baroque
 2 Expressionism
 3 Impressionism
-4 Neoclassicism
-5 Pop Art
-6 Realism
-7 Renaissance
-8 Surrealism
+4 Realism
+5 Renaissance
+6 Surrealism

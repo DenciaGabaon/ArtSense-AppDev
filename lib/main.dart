@@ -1,6 +1,8 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'NavigationBar.dart';
+import 'package:carousel_slider/carousel_controller.dart';
 
 
 void main() {
@@ -20,7 +22,7 @@ class ArtSense extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Montserrat'),
       routes: {
-        '/second': (context) => MyNavigation(),
+        '/second': (context) => const MyNavigation(),
        // '/third': (context) => Camera(),
         // Define a named route for SecondScreen
       },
@@ -51,6 +53,19 @@ class _MyWelcomePageState extends State<MyWelcomePage> {
     });
   }
 
+  final List<String> images = [
+    'assets/popart.jpg',
+    'assets/Welcome1.png',
+     'assets/neoclassicism.jpg',
+  ];
+
+  List<Widget> generateImages(){
+    return images.map((element)=> ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Image.asset(element, fit: BoxFit.cover, width: 304, height: 433,),
+    )).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -62,6 +77,7 @@ class _MyWelcomePageState extends State<MyWelcomePage> {
           padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
           child: Column(
             children: [
+              SizedBox(height: 11,),
               Center(
                 child: SizedBox(
                   width: 250,
@@ -91,12 +107,23 @@ class _MyWelcomePageState extends State<MyWelcomePage> {
                   ),
                 ),
               ),
+             SizedBox(height: 25),
 
-              Container(
-                width: size.width,
-                margin: const EdgeInsets.only(top: 25, bottom: 25),
-                child: Image.asset('assets/Welcome1.png', height: 433, width: 304),
-              ),
+           Stack(
+             children: [
+               CarouselSlider(items: generateImages(),
+                 options: CarouselOptions(
+                   enlargeCenterPage: true,
+                   autoPlay: true,
+                   aspectRatio: 0.85,
+                    // viewportFraction: 0.85
+                 ),),
+             ]
+           ),
+         // ),
+
+
+              SizedBox(height: 25,),
               const Align(
                 alignment: Alignment.center,
                 child: Text(
