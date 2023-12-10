@@ -48,45 +48,9 @@ class _DisplayPredictionState extends State<DisplayPrediction> {
   void initState()
   {
     super.initState();
-    // logger.d(widget.importedimage);
-    // Load the image from the File
-    // img.Image image = loadImage(widget.importedimage);
-    // logger.d(image);
-    // byteList = normalizeImage(image);
-    // logger.d(byteList);            // Logging the values of image pixel
     loadModel();
   }
 
-  img.Image loadImage(File file) {
-    // Read image bytes from the file
-    List<int> imageBytes = file.readAsBytesSync();
-
-    // Decode the image using the image package
-    img.Image? decodedImage = img.decodeImage(Uint8List.fromList(imageBytes));
-
-    // You may want to handle the case where decoding fails
-    if (decodedImage == null) {
-      throw Exception('Failed to decode image');
-    }
-    return decodedImage;
-  }
-
-
-  Float32List normalizeImage(img.Image image){
-    int height = image.height;
-    int width = image.width;
-
-    var convertedBytes = Float32List(height * width);
-    var buffer = Float32List.view(convertedBytes.buffer);
-    int pixelIndex = 0;
-    for (var i = 0; i < height; i++) {
-      for (var j = 0; j < width; j++) {
-        var pixel = image.getPixel(j, i);
-        buffer[pixelIndex++] = img.getLuminance(pixel) / 255.0;
-      }
-    }
-    return buffer;
-  }
 
   Future<void> loadModel() async {
     try {
