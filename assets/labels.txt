@@ -1,7 +1,6 @@
-0 Abstract
-1 Baroque
-2 Expressionism
-3 Impressionism
-4 Realism
-5 Renaissance
-6 Surrealism
+0 Baroque
+1 Expressionism
+2 Impressionism
+3 Realism
+4 Renaissance
+5 Surrealism

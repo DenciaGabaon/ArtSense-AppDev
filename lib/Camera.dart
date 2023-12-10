@@ -10,20 +10,24 @@
 
 
 //import 'package:flutter/cupertino.dart';
+import 'dart:ffi';
 import 'dart:io';
 
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as img;
 import 'package:tflite/tflite.dart';
+import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'ImagePop.dart';
+
 
 
 class DisplayPrediction extends StatefulWidget {
   File importedimage;
 
   DisplayPrediction({Key? key, required this.importedimage}) : super(key: key);
-
 
   @override
   _DisplayPredictionState createState() => _DisplayPredictionState();
@@ -35,7 +39,8 @@ class _DisplayPredictionState extends State<DisplayPrediction> {
   late List _results;
   bool imageSelect=false;
   bool loading = true;
-
+  late Float32List byteList; // Declare at the class level
+  final Logger logger = Logger();
   //late String LabelHolder;
 
 
@@ -43,45 +48,134 @@ class _DisplayPredictionState extends State<DisplayPrediction> {
   void initState()
   {
     super.initState();
+    // logger.d(widget.importedimage);
+    // Load the image from the File
+    // img.Image image = loadImage(widget.importedimage);
+    // logger.d(image);
+    // byteList = normalizeImage(image);
+    // logger.d(byteList);            // Logging the values of image pixel
     loadModel();
   }
 
+  img.Image loadImage(File file) {
+    // Read image bytes from the file
+    List<int> imageBytes = file.readAsBytesSync();
 
-  Future loadModel()
-  async {
-    Tflite.close();
-    String res;
-    res=(await Tflite.loadModel(model: "assets/initial_model_567.tflite",
-        labels: "assets/labels.txt"))!;
-    if (kDebugMode) {
-      print("Models loading status: $res");
+    // Decode the image using the image package
+    img.Image? decodedImage = img.decodeImage(Uint8List.fromList(imageBytes));
+
+    // You may want to handle the case where decoding fails
+    if (decodedImage == null) {
+      throw Exception('Failed to decode image');
+    }
+    return decodedImage;
+  }
+
+
+  Float32List normalizeImage(img.Image image){
+    int height = image.height;
+    int width = image.width;
+
+    var convertedBytes = Float32List(height * width);
+    var buffer = Float32List.view(convertedBytes.buffer);
+    int pixelIndex = 0;
+    for (var i = 0; i < height; i++) {
+      for (var j = 0; j < width; j++) {
+        var pixel = image.getPixel(j, i);
+        buffer[pixelIndex++] = img.getLuminance(pixel) / 255.0;
+      }
+    }
+    return buffer;
+  }
+
+  Future<void> loadModel() async {
+    try {
+      Tflite.close();
+      String res = (await Tflite.loadModel(
+        model: "assets/model_64.tflite",
+        labels: "assets/labels.txt",
+      ))!;
+
+      if (kDebugMode) {
+        logger.d("Models loading status: $res");
+      }
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        logger.d("Error loading TFLite model: $e");
+        logger.d("StackTrace: $stackTrace");
+      }
     }
   }
 
 
-  Future imageClassification(File image)
-  async {
-    final List? recognitions = await Tflite.runModelOnImage(
-      path: image.path,
-      numResults: 7,
-      threshold: 0.05,
-      imageMean: 127.5,
-      imageStd: 127.5,
-    );
+  // Future<Map<String, dynamic>> classifyImage(Float32List inputData) async {
+  //   // Load the model and labels
+  //   final interpreter = await Interpreter.fromAsset('assets/initial_model_567.tflite');
+  //   final labels = await FileUtil.loadLabels('assets/labels.txt');
+  //   logger.d(interpreter);
+  //   logger.d(labels);
+  //   try {
+  //     // Check if the input data needs normalization
+  //     if (inputData.isEmpty || inputData.first < 0.0 || inputData.first > 1.0) {
+  //       logger.d("HINDI NA NORMALIZE");
+  //     }
+  //
+  //     // Create input and output maps
+  //     final inputMap = {'input': inputData.buffer.asFloat32List()};
+  //     final outputMap = {'output': Float32List(interpreter.getOutputTensor(0).shape[0])};
+  //     interpreter.run(inputMap, outputMap);
+  //
+  //     // Get the output data
+  //     final outputData = outputMap['output'] as Float32List;
+  //
+  //     // Find the index with the highest probability
+  //     final maxIndex = outputData.indexOf(outputData.reduce((curr, next) => curr > next ? curr : next));
+  //
+  //     // Get the class label corresponding to the maxIndex
+  //     final maxClassLabel = labels[maxIndex];
+  //     logger.d(maxClassLabel);
+  //     return {
+  //       'classIndex': maxIndex,
+  //       'className': maxClassLabel,
+  //     };
+  //   } finally {
+  //     // Close the interpreter to release resources
+  //     interpreter.close();
+  //   }
+  // }
 
-    setState(() {
-      _results=recognitions!;
-      _image = image;
-      imageSelect = true;
-      loading = false;
-    });
+  Future<void> imageClassification(String imagePath) async {
+    try {
+      // Reload the model if needed
+      await loadModel();
+
+      // Run inference on the image
+      final List? recognitions = await Tflite.runModelOnImage(
+        path: imagePath,
+        numResults: 6,
+        threshold: 0.5,
+        imageMean: 0.0,  // Adjust if needed based on the model training
+        imageStd: 255.0,   // Adjust if needed based on the model training
+      );
+      logger.d(recognitions);
+      setState(() {
+        _results = recognitions!; // Use an empty list if recognitions is null
+        _image=File(widget.importedimage.path);
+        imageSelect = true;
+        loading = false;
+      });
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        logger.d("Error during image classification: $e");
+        logger.d("StackTrace: $stackTrace");
+      }
+    }
   }
 
 
   @override
   Widget build(BuildContext context) {
-    imageClassification(File(widget.importedimage.path));
-
+    imageClassification(widget.importedimage.path);          // for image prediction
     if (loading == true) {
       return const Scaffold(
         body: Center(
