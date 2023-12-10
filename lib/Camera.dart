@@ -157,7 +157,7 @@ class _DisplayPredictionState extends State<DisplayPrediction> {
         imageMean: 0.0,  // Adjust if needed based on the model training
         imageStd: 255.0,   // Adjust if needed based on the model training
       );
-      logger.d(recognitions);
+      // logger.d(recognitions);
       setState(() {
         _results = recognitions!; // Use an empty list if recognitions is null
         _image=File(widget.importedimage.path);
