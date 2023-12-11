@@ -30,13 +30,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
+  image: ^4.1.3
+  logger: ^2.0.2+1
+  tflite_flutter: ^0.10.4
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_native_splash: ^2.3.5
-  image_picker: ^0.8.1
+  image_picker: ^1.0.4
   image_cropper: ^5.0.0
   permission_handler: ^11.0.1
   tflite: ^1.1.2
@@ -91,21 +92,16 @@ flutter:
     - assets/home_outline.png
     - assets/settings.png
     - assets/palette_filled.png
-    - assets/abstract.png
-    - assets/initial_model_567.tflite
     - assets/labels.txt
     - assets/imagePlaceholder.png
     - assets/imagePlaceholder2.png
     - assets/baroque.jpg
     - assets/expressionism.jpg
     - assets/impressionism.jpeg
-    - assets/neoclassicism.jpg
-    - assets/popart.jpg
     - assets/realism.jpg
     - assets/renaissance.jpeg
     - assets/surrealism.jpg
     - assets/backicon.png
-    - assets/Abstract/
     - assets/Baroque/
     - assets/Expressionism/
     - assets/Realism/
@@ -113,6 +109,7 @@ flutter:
     - assets/Surrealism/
     - assets/Impressionism/
     - assets/loading.png
+    - assets/model_64.tflite
 
 
   # The following line ensures that the Material Icons font is

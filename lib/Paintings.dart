@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:tiktoklikescroller/tiktoklikescroller.dart';
 
 class Genre extends StatelessWidget {
-  const Genre({Key? key});
+   const Genre({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> paintings = [Abstract(), Baroque(), Expressionism(),
+    final List<Widget> paintings = [Baroque(), Expressionism(),
     Impressionism(), Realism(), Rennaissance(),
     Surrealism()];
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Scrollbar(
+         body: Scrollbar(
           controller: ScrollController(),
           thumbVisibility: true,
-          thickness: 10,
+          trackVisibility: true,
+          thickness: 8,
           child: TikTokStyleFullPageScroller(
           contentSize: paintings.length,
           swipeVelocityThreshold: 2000,
@@ -23,6 +24,7 @@ class Genre extends StatelessWidget {
           builder: (BuildContext context, int index) {
             return Container(
               child: paintings[index],
+
             );
           },
         ),
@@ -32,7 +34,8 @@ class Genre extends StatelessWidget {
     );
   }
 
-  Widget Abstract() {
+
+  Widget Baroque() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
       child: Center(
@@ -61,54 +64,7 @@ class Genre extends StatelessWidget {
             const SizedBox(
               width: 304,
               child: Text(
-                'Abstract (20th Century)',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child:
-              Image.asset('assets/abstract.png', width: 304,
-                height: 433,),
-            ),
-            const SizedBox(height: 15),
-            const SizedBox(
-              width: 304,
-              height: 80,
-              child: Text(
-                'Abstract painting is a form of art that emphasizes the use of colors, shapes, and gestural marks to convey emotions or ideas rather than a realistic representation of the world.',
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  fontStyle: FontStyle.normal,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget Baroque() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
-      child: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 100),
-            const SizedBox(
-              width: 304,
-              child: Text(
-                'Baroque (20th Century)',
+                'Baroque',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
@@ -127,9 +83,9 @@ class Genre extends StatelessWidget {
             const SizedBox(height: 15),
             const SizedBox(
               width: 304,
-              height: 130,
+              height: 100,
               child: Text(
-                'Baroque painting is characterized by its dramatic, theatrical, and realistic style. Baroque artists often used strong contrasts of light and dark, bold colors, and exaggerated movement to create a sense of drama and excitement. They also frequently depicted religious themes, mythology, and history.',
+                'Baroque painting is marked by its dramatic, realistic style featuring strong light-dark contrasts, bold colors, and exaggerated movement for heightened drama. Artists often portrayed religious themes, mythology, and historical subjects.',
                 textAlign: TextAlign.justify,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
@@ -155,7 +111,7 @@ class Genre extends StatelessWidget {
             const SizedBox(
               width: 304,
               child: Text(
-                'Expressionism (20th Century)',
+                'Expressionism',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
@@ -202,7 +158,7 @@ class Genre extends StatelessWidget {
             const SizedBox(
               width: 304,
               child: Text(
-                'Impressionism (20th Century)',
+                'Impressionism',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
@@ -250,7 +206,7 @@ class Genre extends StatelessWidget {
             const SizedBox(
               width: 304,
               child: Text(
-                'Realism (20th Century)',
+                'Realism',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
@@ -297,7 +253,7 @@ class Genre extends StatelessWidget {
             const SizedBox(
               width: 304,
               child: Text(
-                'Rennaissance (20th Century)',
+                'Rennaissance',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
@@ -344,7 +300,7 @@ class Genre extends StatelessWidget {
             const SizedBox(
               width: 304,
               child: Text(
-                'Surrealism (20th Century)',
+                'Surrealism',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontFamily: 'Montserrat',

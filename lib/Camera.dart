@@ -10,20 +10,24 @@
 
 
 //import 'package:flutter/cupertino.dart';
+import 'dart:ffi';
 import 'dart:io';
 
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as img;
 import 'package:tflite/tflite.dart';
+import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'ImagePop.dart';
+
 
 
 class DisplayPrediction extends StatefulWidget {
   File importedimage;
 
   DisplayPrediction({Key? key, required this.importedimage}) : super(key: key);
-
 
   @override
   _DisplayPredictionState createState() => _DisplayPredictionState();
@@ -35,7 +39,8 @@ class _DisplayPredictionState extends State<DisplayPrediction> {
   late List _results;
   bool imageSelect=false;
   bool loading = true;
-
+  late Float32List byteList; // Declare at the class level
+  final Logger logger = Logger();
   //late String LabelHolder;
 
 
@@ -47,41 +52,94 @@ class _DisplayPredictionState extends State<DisplayPrediction> {
   }
 
 
-  Future loadModel()
-  async {
-    Tflite.close();
-    String res;
-    res=(await Tflite.loadModel(model: "assets/initial_model_567.tflite",
-        labels: "assets/labels.txt"))!;
-    if (kDebugMode) {
-      print("Models loading status: $res");
+  Future<void> loadModel() async {
+    try {
+      Tflite.close();
+      String res = (await Tflite.loadModel(
+        model: "assets/model_64.tflite",
+        labels: "assets/labels.txt",
+      ))!;
+
+      if (kDebugMode) {
+        logger.d("Models loading status: $res");
+      }
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        logger.d("Error loading TFLite model: $e");
+        logger.d("StackTrace: $stackTrace");
+      }
     }
   }
 
 
-  Future imageClassification(File image)
-  async {
-    final List? recognitions = await Tflite.runModelOnImage(
-      path: image.path,
-      numResults: 7,
-      threshold: 0.05,
-      imageMean: 127.5,
-      imageStd: 127.5,
-    );
+  // Future<Map<String, dynamic>> classifyImage(Float32List inputData) async {
+  //   // Load the model and labels
+  //   final interpreter = await Interpreter.fromAsset('assets/initial_model_567.tflite');
+  //   final labels = await FileUtil.loadLabels('assets/labels.txt');
+  //   logger.d(interpreter);
+  //   logger.d(labels);
+  //   try {
+  //     // Check if the input data needs normalization
+  //     if (inputData.isEmpty || inputData.first < 0.0 || inputData.first > 1.0) {
+  //       logger.d("HINDI NA NORMALIZE");
+  //     }
+  //
+  //     // Create input and output maps
+  //     final inputMap = {'input': inputData.buffer.asFloat32List()};
+  //     final outputMap = {'output': Float32List(interpreter.getOutputTensor(0).shape[0])};
+  //     interpreter.run(inputMap, outputMap);
+  //
+  //     // Get the output data
+  //     final outputData = outputMap['output'] as Float32List;
+  //
+  //     // Find the index with the highest probability
+  //     final maxIndex = outputData.indexOf(outputData.reduce((curr, next) => curr > next ? curr : next));
+  //
+  //     // Get the class label corresponding to the maxIndex
+  //     final maxClassLabel = labels[maxIndex];
+  //     logger.d(maxClassLabel);
+  //     return {
+  //       'classIndex': maxIndex,
+  //       'className': maxClassLabel,
+  //     };
+  //   } finally {
+  //     // Close the interpreter to release resources
+  //     interpreter.close();
+  //   }
+  // }
 
-    setState(() {
-      _results=recognitions!;
-      _image = image;
-      imageSelect = true;
-      loading = false;
-    });
+  Future<void> imageClassification(String imagePath) async {
+    try {
+      // Reload the model if needed
+      await loadModel();
+
+      // Run inference on the image
+      final List? recognitions = await Tflite.runModelOnImage(
+        path: imagePath,
+        numResults: 6,
+        threshold: 0.5,
+        imageMean: 0.0,  // Adjust if needed based on the model training
+        imageStd: 255.0,   // Adjust if needed based on the model training
+      );
+      // logger.d(recognitions);
+      setState(() {
+        _results = recognitions!; // Use an empty list if recognitions is null
+        _image=File(widget.importedimage.path);
+        imageSelect = true;
+        loading = false;
+      });
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        logger.d("Error during image classification: $e");
+        logger.d("StackTrace: $stackTrace");
+      }
+    }
   }
 
 
   @override
   Widget build(BuildContext context) {
-    imageClassification(File(widget.importedimage.path));
-
+    imageClassification(widget.importedimage.path);          // for image prediction
     if (loading == true) {
       return const Scaffold(
         body: Center(
@@ -112,13 +170,8 @@ class _DisplayPredictionState extends State<DisplayPrediction> {
                 fontSize: 20, fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w800,
               ),),
-
-
-              
             ],
           ),
-         
-          
         ),
       );
     }
@@ -154,33 +207,25 @@ class _DisplayPredictionState extends State<DisplayPrediction> {
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: Color.fromRGBO(66, 103, 178, 1),
               ),
-                    height: 344,
+                    height: 380,
                     width: 350,
-                    margin: const EdgeInsets.only(top: 30, left: 20, right: 20),
+                    margin: const EdgeInsets.only(top: 25, left: 20, right: 20,),
                      child: Column(
                        children: [
                        const SizedBox(height: 22),
                          ClipRRect(
                            borderRadius: BorderRadius.circular(20),
-                           child: Image.file(_image, fit: BoxFit.cover, height: 130, width: 312,),
+                           child: Image.file(_image, fit: BoxFit.cover, height: 170, width: 312,),
                          ),
-                  // Add the result display here
-                         // const SizedBox(height: 22),
 
-
-                  //  if (imageSelect)
-                  // ..._results.map((result) {
-
-
-                  //dynamic _label = "${_results[0]['label']}".replaceAll(RegExp(r'[0-9]\s'), '');
-                  //  LabelHolder = _label;
                   (imageSelect && _results.isNotEmpty)
                       ?Container(
                       width: 312,
-                      margin: const EdgeInsets.only(left: 22, right: 22, bottom: 23),
+                      margin: const EdgeInsets.only(left: 22, right: 22, bottom: 20),
                       child: Column (
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const SizedBox(height: 16,),
                             SizedBox(
                               child: Text( cleanedLabel,
                                 style: const TextStyle(
@@ -244,7 +289,7 @@ class _DisplayPredictionState extends State<DisplayPrediction> {
               ),
             ),
 
-            const SizedBox( height: 49,),
+            const SizedBox( height: 43,),
             SizedBox( width: 261, child: Text('Other $cleanedLabel Paintings',
               style: const TextStyle(color: Color.fromRGBO(66, 103, 178, 1),
                   fontFamily: 'Montserrat', fontWeight: FontWeight.w800,

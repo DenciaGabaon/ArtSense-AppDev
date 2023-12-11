@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 //import 'package:permission_handler/permission_handler.dart';
 //import 'package:tflite_flutter/tflite_flutter.dart'
 
@@ -127,8 +128,8 @@ class Home extends State<MyHomePage>{
 
   _Gallery() async {
     await  picker.pickImage(
-        source: ImageSource.gallery, imageQuality: 50,
-        maxHeight: 500,maxWidth: 500
+        source: ImageSource.gallery, imageQuality: 100,
+        maxHeight: 640,maxWidth: 640
     ).then((value){
       if(value != null){
         _cropImage(File(value.path));
@@ -138,8 +139,8 @@ class Home extends State<MyHomePage>{
 
   _Camera() async {
     await picker.pickImage(
-        source: ImageSource.camera, imageQuality: 50,
-        maxHeight: 500,maxWidth: 500
+        source: ImageSource.camera, imageQuality: 100,
+        maxHeight: 640,maxWidth: 640
     ).then((value){
       if(value != null){
         _cropImage(File(value.path));
@@ -148,6 +149,7 @@ class Home extends State<MyHomePage>{
   }
 
   _cropImage(File imgFile) async {
+    final Logger logger = Logger();
     final croppedFile = await ImageCropper().cropImage(
         sourcePath: imgFile.path,
         aspectRatioPresets: Platform.isAndroid
@@ -179,14 +181,14 @@ class Home extends State<MyHomePage>{
         ]);
     if (croppedFile != null) {
 
-      imageCache.clear();
-      setState(() {
-        var imageFile = File(croppedFile.path);
-
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => DisplayPrediction(importedimage: imageFile)));
-      });
-      // reload();
+    imageCache.clear();
+    setState(() {
+    var imageFile = File(croppedFile.path);
+    logger.d("image");
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => DisplayPrediction(importedimage: imageFile)));
+    });
+    // reload();
     }
   }
 
