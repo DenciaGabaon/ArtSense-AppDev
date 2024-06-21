@@ -1,5 +1,6 @@
 # ArtSense
 
+## Overview
 Identifying Painting styles as a non-artist and an individual who's unfamiliar with paintings is not an easy task to deal with. Simply analyzing may be challenging, as painting style varies in terms of shape, color, texture, and the message it wants to convey. Thereby, ArtSense, an application developed with Flutter and Dart, incorporates an 
 integrated model using TensorFlow, utilizing Convolutional Neural Network as its intelligence with the aim to identify whether a certain image belongs to a specific painting artstyle, was developed. This application marks a significant step toward making art appreciation more accessible and inclusive for individuals regardless of their artistic background.
 
